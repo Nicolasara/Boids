@@ -47,4 +47,9 @@ class Boid {
     lengthToBoid(other) {
         return this.position.dist(other.position)
     }
+
+    updateSize(width, height) {
+        this.width = width;
+        this.height = height;
+    }
 }

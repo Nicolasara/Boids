@@ -6,10 +6,10 @@ class BoidsModel {
      */
     constructor(width, height, boidCount) {
         this.SPEED = 10;
-        this.DISCOVER_RANGE = 150;
-        this.SEPERATION_PERCENTAGE = .8;
+        this.DISCOVER_RANGE = 175;
+        this.SEPERATION_PERCENTAGE = .7;
         this.ALIGNMENT_PERCENTAGE = .075;
-        this.COHESION_PERCENTAGE = .05;
+        this.COHESION_PERCENTAGE = .045;
         this.width = width;
         this.height = height;
         this.boidCount = boidCount;
@@ -37,7 +37,7 @@ class BoidsModel {
         nearbyBoids.forEach(otherBoid => {
             let boidPosition = createVector(boid.position.x, boid.position.y);
             let directionOtherBoidToBoid = boidPosition.sub(otherBoid.position);
-            let magnitude = 100 / (10 + directionOtherBoidToBoid.mag());
+            let magnitude = 80 / (8 + directionOtherBoidToBoid.mag());
             directionOtherBoidToBoid.setMag(magnitude);
             nearbyBoidsInvertedDistance.add(directionOtherBoidToBoid);
         });
@@ -105,5 +105,13 @@ class BoidsModel {
      */
     getBoids() {
         return this.boids;
+    }
+
+    updateSize(width, height) {
+        this.width = width;
+        this.height = height;
+        this.boids.forEach(boid => {
+            boid.updateSize(width, height);
+        })
     }
 }

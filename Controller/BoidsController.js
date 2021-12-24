@@ -1,9 +1,7 @@
 class BoidsController {
-    constructor(model, view, height, width) {
+    constructor(model, view) {
         this.model = model;
         this.view = view;
-        // this.height = height;
-        // this.width = width;
     }
     
     tick() {

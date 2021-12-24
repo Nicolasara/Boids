@@ -1,10 +1,6 @@
 class BoidsView {
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
-        createCanvas(width, height);
-    }
-
+    constructor() {}
+    
     /**
      * draws each boid
      * 
