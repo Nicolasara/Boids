@@ -5,16 +5,37 @@ class BoidsModel {
      * @param {number} boidCount 
      */
     constructor(width, height, boidCount) {
-        this.SPEED = 10;
-        this.DISCOVER_RANGE = 175;
-        this.SEPERATION_PERCENTAGE = .7;
-        this.ALIGNMENT_PERCENTAGE = .075;
-        this.COHESION_PERCENTAGE = .045;
         this.width = width;
         this.height = height;
         this.boidCount = boidCount;
         this.boids = this.generateBoids();
+        this.speed = 0;
+        this.range = 0;
+        this.seperationPer = 0;
+        this.alginmentPer = 0;
+        this.cohesionPer = 0;
     }
+
+    setSpeed(speed) {
+        this.speed = speed;
+    }
+
+    setRange(range) {
+        this.range = range;
+    }
+
+    setSeperationPer(seperationPer) {
+        this.seperationPer = seperationPer;
+    }
+
+    setAlignmentPer(alginmentPer) {
+        this.alginmentPer = alginmentPer;
+    }
+
+    setCohesionPer(cohesionPer) {
+        this.cohesionPer = cohesionPer;
+    }
+
 
     /**
      * @returns {Boid}
@@ -24,7 +45,7 @@ class BoidsModel {
         for (var i = 0; i < this.boidCount; i++) {
             let x = Math.random() * this.width;
             let y = Math.random() * this.height;
-            boids[i] = new Boid(x, y, this.SPEED, this.width, this.height);
+            boids[i] = new Boid(x, y, 1, this.width, this.height);
         }
         return boids;
     }
@@ -41,20 +62,20 @@ class BoidsModel {
             directionOtherBoidToBoid.setMag(magnitude);
             nearbyBoidsInvertedDistance.add(directionOtherBoidToBoid);
         });
-        nearbyBoidsInvertedDistance.mult(this.SEPERATION_PERCENTAGE);
+        nearbyBoidsInvertedDistance.mult(this.seperationPer / 100);
         boid.position.add(nearbyBoidsInvertedDistance);
     }
     
     /**
      * @param {Boid} boid 
      */
-    allignBoids(boid, nearbyBoids) {
+    alignBoids(boid, nearbyBoids) {
         var nearbyBoidsVelocity = createVector(0, 0);
         nearbyBoids.forEach(otherBoid => {
             nearbyBoidsVelocity.add(otherBoid.velocity);
         })
         let angleBetween = boid.velocity.angleBetween(nearbyBoidsVelocity);
-        boid.velocity.setHeading(this.ALIGNMENT_PERCENTAGE * angleBetween +
+        boid.velocity.setHeading(this.alginmentPer / 100 * angleBetween +
              boid.velocity.heading());
     }
 
@@ -69,7 +90,7 @@ class BoidsModel {
         nearbyBoidsPosition.div(nearbyBoids.length);
         nearbyBoidsPosition.sub(boid.position)
         let angleBetween = boid.velocity.angleBetween(nearbyBoidsPosition);
-        boid.velocity.setHeading(this.COHESION_PERCENTAGE * angleBetween +
+        boid.velocity.setHeading(this.cohesionPer / 100 * angleBetween +
              boid.velocity.heading());
     }
 
@@ -81,7 +102,7 @@ class BoidsModel {
     getBoidsNearby(boid) {
         var nearbyBoids = []
         this.boids.forEach(otherBoid => {
-            if (boid.lengthToBoid(otherBoid) < this.DISCOVER_RANGE && otherBoid != boid) {
+            if (boid.lengthToBoid(otherBoid) < this.range && otherBoid != boid) {
                 nearbyBoids.push(otherBoid);
             }
         });
@@ -92,10 +113,11 @@ class BoidsModel {
         // console.log(this.getBoidsNearby(this.boids[0], 100))
         this.boids.forEach(boid => {
             boid.move();
+            boid.velocity.setMag(this.speed);
             let nearbyBoids = this.getBoidsNearby(boid);
             if (nearbyBoids.length == 0) return;
             this.seperation(boid, nearbyBoids);
-            this.allignBoids(boid, nearbyBoids);
+            this.alignBoids(boid, nearbyBoids);
             this.cohesion(boid, nearbyBoids);
         });
     }
