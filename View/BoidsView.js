@@ -1,5 +1,12 @@
 class BoidsView {
-    constructor() {}
+    constructor() {
+        let slidersContainer = createDiv();
+        slidersContainer.id("sliders");
+        slidersContainer.parent("container")
+        let centeredSlidersContainer = createDiv();
+        centeredSlidersContainer.id("centered-slider");
+        centeredSlidersContainer.parent("sliders")
+    }
     
     /**
      * draws each boid
@@ -26,5 +33,26 @@ class BoidsView {
         //          x + (2 * SIZE / Math.sqrt(3)) * Math.cos(angle + Math.PI * 2 / 3), 
         //          y - (2 * SIZE / Math.sqrt(3)) * Math.sin(angle + Math.PI * 2 / 3));
         circle(x, y, SIZE)
+    }
+
+    setParameters(controller) {
+        let sliders = [];
+        sliders.push(new Slider(1, 20, 10, "speed", 
+            (speed) => controller.setSpeed(speed)));
+        sliders.push(new Slider(0, 300, 175, "range", 
+            (range) => controller.setRange(range)));
+        sliders.push(new Slider(0, 100, 75, "seperation", 
+            (seperationPer) => controller.setSeperationPer(seperationPer)));
+        sliders.push(new Slider(0, 100, 5, "alignment", 
+            (alignmentPer) => controller.setAlignmentPer(alignmentPer)));
+        sliders.push(new Slider(0, 100, 10, "cohesion", 
+            (cohesionPer) => controller.setCohesionPer(cohesionPer)));
+        sliders.forEach(slider => {
+            let sliderContainer = createDiv();
+            sliderContainer.class("slider-container");
+            sliderContainer.parent("centered-slider")
+            slider.create(sliderContainer);
+            slider.updateParameter();
+        });
     }
 }

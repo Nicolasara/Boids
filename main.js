@@ -1,11 +1,17 @@
 function setup() {
     WIDTH = windowWidth;
     HEIGHT = windowHeight;
+    canvas = createCanvas(WIDTH, HEIGHT);
+    canvas.id("canvas");
+    div = createDiv();
+    div.id("container");
+    canvas.parent(div);
     view = new BoidsView();
     boidModel = new BoidsModel(WIDTH, HEIGHT, 50);
-    controller = new BoidsController(boidModel, view);
+    controller = new BoidsController(boidModel);
+    controller.setView(view);
     frameRate(20);
-    createCanvas(WIDTH, HEIGHT);
+    
 }
   
 function draw() {
